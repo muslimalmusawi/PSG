@@ -1,16 +1,18 @@
-val ktor_version:String by project
-val kotlin_version:String by project
-val logback_version:String by project
+val ktorVersion: String by project
+val kotlinVersion: String by project
+val logbackVersion: String by project
+val koinVersion: String by project
 
 plugins {
     application
     kotlin("jvm") version "1.6.10"
+    kotlin("plugin.serialization") version "1.5.31"
 }
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-application{
+application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
@@ -21,7 +23,12 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation ("io.ktor:ktor-server-core:$ktor_version")
-    implementation ("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.ktor:ktor-gson:$ktorVersion")
+    implementation("io.ktor:ktor-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-html-builder:$ktorVersion")
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 }
