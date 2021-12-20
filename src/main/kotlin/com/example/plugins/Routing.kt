@@ -1,6 +1,9 @@
 package com.example.plugins
 
 import com.example.models.Person
+import com.example.route.getAllHeroes
+import com.example.route.newPost
+import com.example.route.root
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.*
@@ -9,16 +12,12 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.html.*
 
-fun Application.configureRouting(){
+fun Application.configureRouting() {
     routing {
-        static(remotePath = "assets") {//all resource is under the path "assets"
-            resources("static")
-        }
-        get("/hello"){
-            call.respondText("welcome")
-        }
-        get("/helloNoor"){
-            call.respondText("welcomeNoor")
+        root()
+        getAllHeroes()
+        static(remotePath = "images") {//all resource is under the path "assets"
+            resources("images")
         }
         get("/welcome") {
             val name = call.request.queryParameters["name"]
@@ -40,21 +39,18 @@ fun Application.configureRouting(){
                     img {
                         when (name) {
                             "Noor" -> {
-                                src = "assets/image1.jpg"
+                                src = "images/image1.jpg"
                             }
                             "ahmed" -> {
-                                src = "assets/image2.jpg"
+                                src = "images/image2.jpg"
                             }
                             "ali" -> {
-                                src = "assets/image3.jpg"
+                                src = "images/image3.jpg"
                             }
                         }
                     }
                 }
             }
-        }
-        get("/") {
-            call.respondText("Hello World!")
         }
         get("/user/{username}") {
             val username = call.parameters["username"]
@@ -84,5 +80,6 @@ fun Application.configureRouting(){
         get("/moved") {
             call.respondText(text = "We have bee Successfully redirect")
         }
+        newPost()
     }
 }

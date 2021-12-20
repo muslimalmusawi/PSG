@@ -1,12 +1,13 @@
 package com.example.models
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiResponse(
-    val success: Boolean,
-    val message: String? = null,
-    val prevPage: Int? = null,
-    val newtPage: Int? = null,
-    val heroes: List<Hero> = emptyList()
+    @SerializedName("success") val success: Boolean? = null,
+    @SerializedName("message") val message: String? = null,
+    @SerializedName("havePrevPage") val prevPage: Int? = null,
+    @SerializedName("haveNextPage") val nextPage: Int? = null,
+    @SerializedName("value") val data: List<Hero>? = emptyList()
 )
