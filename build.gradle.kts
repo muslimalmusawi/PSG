@@ -31,4 +31,6 @@ dependencies {
     implementation("io.ktor:ktor-html-builder:$ktorVersion")
     implementation("io.insert-koin:koin-ktor:$koinVersion")
     implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
+    implementation("io.ktor:ktor-freemarker:$ktorVersion")
+    implementation("io.ktor:ktor-auth:1.6.7")
 }

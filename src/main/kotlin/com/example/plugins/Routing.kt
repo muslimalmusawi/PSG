@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.models.Hero
 import com.example.models.Person
 import com.example.route.getAllHeroes
 import com.example.route.newPost
@@ -8,6 +9,7 @@ import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.html.*
@@ -81,5 +83,9 @@ fun Application.configureRouting() {
             call.respondText(text = "We have bee Successfully redirect")
         }
         newPost()
+        post("/verify") { //this make the user enter data to make auto to web or another think.
+            val request = call.receive<Hero>()
+            call.respond(request)
+        }
     }
 }

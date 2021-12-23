@@ -57,8 +57,7 @@ class HeroRepositoryImpl : HeroRepository {
             abilities = abilities,
             natureTypes = natureTypes
         ),
-
-        )
+    )
     override val page2: List<Hero> = listOf()
     override val page3: List<Hero> = listOf()
     override val page4: List<Hero> = listOf()
@@ -90,7 +89,7 @@ class HeroRepositoryImpl : HeroRepository {
         if (page == 5) {
             nextPage = null
         }
-        return mapOf("havePrevPage" to prevPage , "haveNextPage" to nextPage)
+        return mapOf("havePrevPage" to prevPage, "haveNextPage" to nextPage)
     }
 
     override suspend fun searchHeroes(): ApiResponse {
