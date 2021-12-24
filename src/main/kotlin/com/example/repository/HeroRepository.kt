@@ -12,6 +12,6 @@ interface HeroRepository {
     val page4: List<Hero>
     val page5: List<Hero>
 
-    suspend fun searchHeroes(): ApiResponse
-    suspend fun getAllHeroes(page: Int): ApiResponse
+    suspend fun searchHeroes(heroName:String?): ApiResponse
+    suspend fun getAllHeroes(page: Int = 1): ApiResponse
 }

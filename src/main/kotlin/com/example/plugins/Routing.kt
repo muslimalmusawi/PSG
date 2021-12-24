@@ -2,9 +2,7 @@ package com.example.plugins
 
 import com.example.models.Hero
 import com.example.models.Person
-import com.example.route.getAllHeroes
-import com.example.route.newPost
-import com.example.route.root
+import com.example.route.*
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.*
@@ -17,7 +15,9 @@ import kotlinx.html.*
 fun Application.configureRouting() {
     routing {
         root()
-        getAllHeroes()
+//        getAllHeroes()
+        getAllHeroesLimit()
+        searchHeroes()
         static(remotePath = "images") {//all resource is under the path "assets"
             resources("images")
         }

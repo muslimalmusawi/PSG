@@ -6,18 +6,9 @@ import com.example.route.abilities
 import com.example.route.familyList
 import com.example.route.natureTypes
 
-class HeroRepositoryImpl : HeroRepository {
+class HeroRepositoryLimitImpl : HeroRepositoryLimit {
 
-    override val heroes: Map<Int, List<Hero>> by lazy {
-        mapOf(
-            1 to page1,
-            2 to page2,
-            3 to page3,
-            4 to page4,
-            5 to page5,
-        )
-    }
-    override val page1: List<Hero> = listOf(
+    override val heroes = listOf(
         Hero(
             id = 1,
             name = "Naruto",
@@ -58,60 +49,74 @@ class HeroRepositoryImpl : HeroRepository {
             natureTypes = natureTypes
         ),
     )
-    override val page2: List<Hero> = listOf()
-    override val page3: List<Hero> = listOf()
-    override val page4: List<Hero> = listOf()
-    override val page5: List<Hero> = listOf()
 
-    override suspend fun getAllHeroes(page: Int): ApiResponse {
-        return ApiResponse(
-            success = true,
-            message = "ok",
-            prevPage = calculatePage(page = page)["havePrevPage"],
-            nextPage = calculatePage(page = page)["haveNextPage"],
-            data = heroes[page]
-        )
-    }
-
-    private fun calculatePage(page: Int): Map<String, Int?> {
-        var prevPage: Int? = page
-        var nextPage: Int? = page
-
-        if (page in 1..4) {
-            nextPage = nextPage?.plus(1)
-        }
-        if (page in 2..5) {
-            prevPage = prevPage?.minus(1)
-        }
-        if (page == 1) {
-            prevPage = null
-        }
-        if (page == 5) {
-            nextPage = null
-        }
-        return mapOf("havePrevPage" to prevPage, "haveNextPage" to nextPage)
-    }
-
-    override suspend fun searchHeroes(heroName:String?): ApiResponse {
-        return ApiResponse(
-            success = true,
-            message = "ok",
-            data = findHero(nameHero = heroName)
-        )
-    }
+    override suspend fun searchHeroes(heroName: String?) = ApiResponse(
+        success = true,
+        message = "ok",
+        data = findHero(nameHero = heroName)
+    )
 
     private fun findHero(nameHero: String?): List<Hero> {
         val heroList = mutableListOf<Hero>()
         return if (!nameHero.isNullOrEmpty()) {
-            heroes.forEach { (_, heroes) ->
-                heroes.forEach { hero ->
-                    if (hero.name?.lowercase()?.contains(nameHero.lowercase()) == true)
-                        heroList.add(hero)
-                }
+            heroes.forEach { hero ->
+                if (hero.name?.lowercase()?.contains(nameHero.lowercase()) == true)
+                    heroList.add(hero)
             }
             heroList
         } else {
             emptyList()
         }
+    }
+
+    override suspend fun getAllHeroes(page: Int, limit: Int) = ApiResponse(
+        success = true,
+        message = "Ok",
+        prevPage = calculatePage(
+            heroes = heroes,
+            page = page,
+            limit = limit
+        )["prevPage"],
+        nextPage = calculatePage(
+            heroes = heroes,
+            page = page,
+            limit = limit
+        )["nextPage"],
+        data = provideHeroes(
+            heroes = heroes,
+            page = page,
+            limit = limit
+        ),
+        time = System.currentTimeMillis()
+    )
+
+    private fun provideHeroes(
+        heroes: List<Hero>,
+        page: Int,
+        limit: Int
+    ): List<Hero> {
+        val allHeroes = heroes.windowed(
+            size = limit,
+            step = limit,
+            partialWindows = true,
+        )
+        require(page > 0 && page <= allHeroes.size)
+        return allHeroes[page - 1]
+    }
+
+    private fun calculatePage(
+        heroes: List<Hero>,
+        page: Int,
+        limit: Int,
+    ): Map<String, Int?> {
+        val allHeroes = heroes.windowed(
+            size = limit,
+            step = limit,
+            partialWindows = true
+        )
+        require(page <= allHeroes.size)
+        val prevPage = if (page == 1) null else page - 1
+        val nextPage = if (page == 5) null else page + 1
+        return mapOf("prevPage" to prevPage, "nextPage" to nextPage)
     }
 }
