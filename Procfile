@@ -1,1 +1,1 @@
-web:build/install/org.example.PSG/bin/org.example.PSG
+web: java -jar build/libs/PSG-1.0-SNAPSHOT.jar
